@@ -1,5 +1,5 @@
 from graph_random import *
-from shape_converstion import *
+from shape_conversion import *
 from graph_io import *
 from graph_draw import *
 import matplotlib.pyplot as plt
@@ -31,11 +31,17 @@ print(adj_list)
 
 
 plt.figure()
+
 plt.subplot(2,2,1)
+plt.title('Z macierzy sąsiedstwa')
 draw_from_adj_matrix(adj_matrix)
+
 plt.subplot(2,2,2)
+plt.title('Z macierzy incydencji')
 draw_from_inc_matrix(inc_matrix)
+
 plt.subplot(2,2,3)
+plt.title('Z listy sąsiedstwa')
 draw_from_adj_list(adj_list)
 
 
