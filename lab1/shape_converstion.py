@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def adj_list_to_inc_matrix(adj_list): # adj_list_to_adj_matrix
+def adj_list_to_adj_matrix(adj_list): # adj_list_to_adj_matrix
     # dla wygody i lepszej czytelności zapisujemy ilość węzłów w przetwarzanym grafie
     num_of_nodes = adj_list.shape[0]
     # inicjujemy macierz sąsiedstwa wypełnioną zerami
@@ -15,12 +15,7 @@ def adj_list_to_inc_matrix(adj_list): # adj_list_to_adj_matrix
     return inc_matrix
 
 
-
-def adj_list_to_adj_matrix(adj_list): #inna nazwa
-    return inc_matrix_to_adj_matrix(adj_list_to_inc_matrix(adj_list))
-
-
-def inc_matrix_to_adj_matrix(inc_matrix): # naodwrót
+def adj_matrix_to_inc_matrix(inc_matrix): # naodwrót
     # dla wygody i lepszej czytelności zapisujemy ilość węzłów w przetwarzanym grafie
     num_of_nodes = inc_matrix.shape[0]
     # macierz incydencji pierwotnie nie zawiera elementów
@@ -38,11 +33,7 @@ def inc_matrix_to_adj_matrix(inc_matrix): # naodwrót
     return np.transpose(adj_matrix)
 
 
-def inc_matrix_to_adj_list(inc_matrix): # inna nazwa
-    return adj_matrix_to_adj_list(inc_matrix_to_adj_matrix(inc_matrix))
-
-
-def adj_matrix_to_adj_list(adj_matrix): # inc_matrix_to_adj_list
+def inc_matrix_to_adj_list(adj_matrix): # inc_matrix_to_adj_list
     # dla wygody i lepszej czytelności zapisujemy ilość węzłów w przetwarzanym grafie
     num_of_nodes = adj_matrix.shape[0]
     # inicjujemy listę sąsiedstwa 
@@ -57,10 +48,13 @@ def adj_matrix_to_adj_list(adj_matrix): # inc_matrix_to_adj_list
     return np.array(adj_list,dtype=object)
 
 
+def adj_list_to_inc_matrix(adj_list):
+    return adj_matrix_to_inc_matrix(adj_list_to_adj_matrix(adj_list))
 
-def adj_matrix_to_inc_matrix(adj_matrix): # inna nazwa
-    return adj_list_to_inc_matrix(adj_matrix_to_adj_list(adj_matrix)) 
 
-#incidence matrix
-#adjacency matrix 
-#adjacency list
+def inc_matrix_to_adj_matrix(inc_matrix):
+    return adj_list_to_adj_matrix(inc_matrix_to_adj_list(inc_matrix))
+
+
+def adj_matrix_to_adj_list(adj_matrix):
+    return inc_matrix_to_adj_list(adj_matrix_to_inc_matrix(adj_matrix))
