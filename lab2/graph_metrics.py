@@ -1,17 +1,22 @@
 import numpy as np 
+import random 
 
 
+# zad 2.1
 def check_if_seq_is_graph(arr) -> bool:
-    arr = np.flip(np.sort(arr))
+    arr = np.flip(np.sort(arr),0)
     while True:
         if not np.count_nonzero(arr):
             return True
-        if arr[0] > arr.size or np.extract(arr < 0, arr).size > 0:
+        if arr[0] >= arr.size or np.extract(arr < 0, arr).size > 0:
             return False
 
         arr = [0] + [item-1 for ind,item in enumerate(arr) if ind > 0 and ind <= arr[0]] + [item for ind,item in enumerate(arr) if ind > arr[0]]
-
-        arr = np.flip(np.sort(arr))
-
+        arr = np.flip(np.sort(arr),0)
 
 
+def find_euler_path(graph):
+    euler_path = []
+    node = random.choice(graph.nodes())
+    return None
+    

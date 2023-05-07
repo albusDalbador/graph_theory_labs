@@ -3,7 +3,7 @@ import networkx as nx
 
 def adj_list_to_adj_matrix(adj_list):
     # dla wygody i lepszej czytelności zapisujemy ilość węzłów w przetwarzanym grafie
-    num_of_nodes = adj_list.shape[0]
+    num_of_nodes = len(adj_list)
     # inicjujemy macierz sąsiedstwa wypełnioną zerami
     adj_matrix = np.zeros((num_of_nodes,num_of_nodes),dtype=np.int32)
     # przechodzimy po liście sąsiedstwa
@@ -33,14 +33,15 @@ def adj_matrix_to_inc_matrix(adj_matrix):
     return np.transpose(inc_matrix)
 
 
-def inc_matrix_to_adj_list(adj_matrix):
+def inc_matrix_to_adj_list(inc_matrix):
     # dla wygody i lepszej czytelności zapisujemy ilość węzłów w przetwarzanym grafie
-    num_of_nodes = adj_matrix.shape[0]
+    inc_matrix = np.array(inc_matrix)
+    num_of_nodes = inc_matrix.shape[0]
     # inicjujemy listę sąsiedstwa 
     adj_list = [[] for _ in range (num_of_nodes)]
     # dla wygodniejszego przetwarzania transponujemy macierz 
-    adj_matrix = np.transpose(adj_matrix)
-    for line in adj_matrix:
+    inc_matrix = np.transpose(inc_matrix)
+    for line in inc_matrix:
         # znajdujemy wierzchołki, które łączy dana krawędź i dodajemy je do odpowiednich list
         i,j = np.nonzero(line)[0]
         adj_list[i].append(j)
@@ -83,3 +84,23 @@ def adj_list_to_nx_graph_object(adj_list):
 
 def inc_matrix_to_nx_graph_object(inc_matrix):
     return adj_matrix_to_nx_graph_object(inc_matrix_to_adj_matrix(inc_matrix))
+
+
+def nx_graph_object_to_inc_matrix(G):
+    num_of_nodes = G.number_of_nodes()
+
+    inc_matrix = []
+    for edge in G.edges:
+        inc_edge = np.zeros(num_of_nodes)
+        inc_edge[[edge]] = 1
+        inc_matrix.append(inc_edge)
+    
+    return np.transpose(np.array(inc_matrix))
+
+
+def nx_graph_object_to_adj_matrix(G):
+    return inc_matrix_to_adj_matrix(nx_graph_object_to_inc_matrix(G))
+
+
+def nx_graph_object_to_adj_list(G):
+    return inc_matrix_to_adj_list(nx_graph_object_to_inc_matrix(G))
