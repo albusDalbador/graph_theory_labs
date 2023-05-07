@@ -1,5 +1,5 @@
 import networkx as nx
-from shape_conversion import *
+from .shape_conversion import *
 
 
 def draw_from_adj_matrix(adj_matrix):

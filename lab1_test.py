@@ -1,13 +1,16 @@
-from graph_random import *
-from shape_conversion import *
-from graph_io import *
-from graph_draw import *
+import sys
+sys.path.append('.')
+
+from lab1.graph_random import *
+from lab1.shape_conversion import *
+from lab1.graph_io import *
+from lab1.graph_draw import *
 import matplotlib.pyplot as plt
 
 
-inc_matrix = read_inc_matrix_shape('inc_matrix.txt')
-adj_matrix = read_adj_matrix_shape('adj_matrix.txt')
-adj_list = read_adj_list_shape('adj_list.txt')
+inc_matrix = read_inc_matrix_shape('./lab1/inc_matrix.txt')
+adj_matrix = read_adj_matrix_shape('./lab1/adj_matrix.txt')
+adj_list = read_adj_list_shape('./lab1/adj_list.txt')
 
 
 adj_matrix = inc_matrix_to_adj_matrix(inc_matrix)
