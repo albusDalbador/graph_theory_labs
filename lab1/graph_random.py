@@ -2,6 +2,8 @@ from random import random
 import numpy as np
 import random
 
+from .shape_conversion import *
+
 
 def rand_graph_edge_num(num_of_nodes,num_of_edges):
     if (num_of_edges > num_of_nodes*(num_of_nodes-1)/2):
@@ -17,7 +19,7 @@ def rand_graph_edge_num(num_of_nodes,num_of_edges):
                     empty_edges.append([i,j])
         x,y = random.choice(empty_edges)
         adj_matrix[x,y],adj_matrix[y,x] = 1,1
-    return adj_matrix
+    return adj_matrix_to_nx_graph_object(adj_matrix)
 
 
 def rand_graph_edge_prob(num_of_nodes,prob):

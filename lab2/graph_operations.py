@@ -1,5 +1,5 @@
-from .graph_metrics import check_if_seq_is_graph
-from lab1.shape_conversion import adj_list_to_nx_graph_object, inc_matrix_to_nx_graph_object,nx_graph_object_to_inc_matrix
+from .graph_metrics import *
+from lab1.shape_conversion import adj_list_to_nx_graph_object
 
 import numpy as np 
 import networkx as nx 
@@ -23,67 +23,55 @@ def generate_graph_from_seq(arr):
             adj_list[power_list[0][0]].append(power_list[ind][0])
         power_list = list(filter(lambda x: x[1] != 0,power_list))
         power_list = sorted(power_list,key=lambda x : x[1], reverse=True)
-
     return adj_list_to_nx_graph_object(adj_list)
 
 
 # zad 2.2
-def randomize_graph(G,num_of_swaps=10):
-    inc_matrix = nx_graph_object_to_inc_matrix(G)
-    inc_matrix = np.transpose(inc_matrix)
-
-    for _ in range(num_of_swaps):
-        first_edge_ind,second_edge_ind = np.random.choice(np.arange(0,len(inc_matrix)),size=2,replace=False)
-        a,b = np.nonzero(inc_matrix[first_edge_ind])[0]
-        c,d = np.nonzero(inc_matrix[second_edge_ind])[0]
-
-        if a != d and b != c:
-            inc_matrix[first_edge_ind][[a,b]] = 0
-            inc_matrix[first_edge_ind][[a,d]] = 1
-            inc_matrix[second_edge_ind][[c,d]] = 0
-            inc_matrix[second_edge_ind][[b,c]] = 1
-
-    return inc_matrix_to_nx_graph_object(np.transpose(inc_matrix))
+def randomize_graph(G,num_of_swaps=10): # mozna zastapic nx.double_edge_swap(G)
+    for _ in range (num_of_swaps):
+        G_step = swap_edges(G.copy())
+        while not np.array_equal([len(G[v]) for v in G],[len(G_step[v]) for v in G]):
+            G_step = swap_edges(G.copy())
+        G = G_step
+    return G
 
 
-# zad 2.3
-def find_biggest_component(G):
-    adj_list = [[x[0] for x in G.adj[node].items()] for node in G.adj]
+def swap_edges(G):
+    edge1,edge2 = random.sample(list(G.edges()),2)
     
-    comp_list = np.full(len(list(adj_list)),-1)
-    comp_num = 0
-    for ind,node in enumerate(adj_list):
-        if comp_list[ind] == -1:
-            comp_num += 1
-            comp_list[ind] = comp_num
-            comp_list = find_biggest_component_rec(comp_num,node,adj_list,comp_list)
-
-    biggest_ind = np.argmax(np.bincount(comp_list))
-    biggest_comp_adj_list = [adj_list[ind] for ind in np.asarray(comp_list == biggest_ind).nonzero()[0]]
+    while edge1 == edge2 or edge1[0] == edge2[0] or edge1[1] == edge2[1]:
+        edge2 = random.choice(list(G.edges()))
     
-    return adj_list_to_nx_graph_object(biggest_comp_adj_list)
-
-
-def find_biggest_component_rec(comp_num,node,adj_list,comp_list):
-    for neighbour in node:
-        if comp_list[neighbour] == -1:
-            comp_list[neighbour] = comp_num
-            comp_list = find_biggest_component_rec(comp_num,adj_list[neighbour],adj_list,comp_list)
-    return comp_list
+    if len(set([edge1[0], edge1[1], edge2[0], edge2[1]])) != 4:
+        return G
+    
+    G.remove_edges_from([edge1, edge2])
+    G.add_edges_from([(edge1[0], edge2[1]), (edge2[0], edge1[1])])
+    
+    return G
 
 
 # zad 2.4
 def generate_euler_graph(num_of_nodes=10):
-    node_degrees = np.random.randint(1,(num_of_nodes-1)/2,num_of_nodes)*2
+    node_degrees = np.random.randint(1,(num_of_nodes+1)/2,num_of_nodes)*2
     while not check_if_seq_is_graph(node_degrees): 
         node_degrees = np.random.randint(1,(num_of_nodes-1)/2,num_of_nodes)*2
 
-    return find_biggest_component(generate_graph_from_seq(node_degrees))
-    
-    # node_degrees = [1]
-    # while not check_if_seq_is_graph(node_degrees):
-    #     for _ in range (num_of_nodes):
-    #         power = random.randint(1,(num_of_nodes-1)/2)*2
-    #         node_degrees.append(power)
+    return find_biggest_component(randomize_graph(generate_graph_from_seq(node_degrees)))
 
-    # return find_biggest_component()
+
+# zad 2.5
+def generate_k_regular_graph(num_of_nodes=10,node_power=5):
+    if num_of_nodes <= node_power:
+        print("Liczba wierzchołków musi być większa od ich stopnia")
+        return None
+    if node_power % 2 == 1 and num_of_nodes % 2 == 1:
+        print("Jeśli stopień jest nieparzysty, to liczba wierzchołków musi być parzysta")
+        return None
+
+    k_regular_graph = generate_graph_from_seq([node_power] * num_of_nodes)
+
+    return randomize_graph(k_regular_graph,num_of_swaps=num_of_nodes*2)
+
+
+
