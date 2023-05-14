@@ -27,7 +27,9 @@ def generate_graph_from_seq(arr):
 
 
 # zad 2.2
-def randomize_graph(G,num_of_swaps=10): # mozna zastapic nx.double_edge_swap(G)
+def randomize_graph(G,num_of_swaps=10): # mozna zastapic przez nx.double_edge_swap(G)
+    if G == None:
+        return None
     for _ in range (num_of_swaps):
         G_step = swap_edges(G.copy())
         while not np.array_equal([len(G[v]) for v in G],[len(G_step[v]) for v in G]):

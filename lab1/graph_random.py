@@ -5,10 +5,10 @@ import random
 from .shape_conversion import *
 
 
-def rand_graph_edge_num(num_of_nodes,num_of_edges):
+def rand_graph_edge_num(num_of_nodes=10,num_of_edges=25):
     if (num_of_edges > num_of_nodes*(num_of_nodes-1)/2):
         print('to many edges, impossible to generate simple graph')
-        return 
+        return None
 
     adj_matrix = np.zeros((num_of_nodes,num_of_nodes))
     for _ in range(num_of_edges):

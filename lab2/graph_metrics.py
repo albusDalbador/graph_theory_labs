@@ -17,6 +17,9 @@ def check_if_seq_is_graph(arr) -> bool:
 
 # zad 2.3
 def find_biggest_component(G):
+    if G == None:
+        return None 
+    
     comp_num = 0
     comp_list = np.full(len(list(G.nodes())),-1)
 
