@@ -2,7 +2,7 @@ import numpy as np
 import networkx as nx
 from lab4.di_shape_conversion import *
 
-def read_digraph_from_inc_matrix(file_path):
+def read_digraph_from_inc_matrix(file_path='input.txt'):
     with open(file_path, 'r') as file:
         lines = file.readlines()
 
@@ -15,7 +15,8 @@ def read_digraph_from_inc_matrix(file_path):
     digraph = inc_matrix_to_nx_digraph_object(incidence_matrix)
     return digraph
 
-def read_digraph_from_adj_matrix(file_path):
+
+def read_digraph_from_adj_matrix(file_path='input.txt'):
     with open(file_path, 'r') as file:
         lines = file.readlines()
 
@@ -28,7 +29,7 @@ def read_digraph_from_adj_matrix(file_path):
     digraph = adj_matrix_to_nx_digraph_object(adjacency_matrix)
     return digraph
 
-def read_digraph_from_adjacency_list(file_path):
+def read_digraph_from_adjacency_list(file_path='input.txt'):
     with open(file_path, 'r') as file:
         lines = file.readlines()
 
