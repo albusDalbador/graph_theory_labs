@@ -48,19 +48,29 @@ def main():
     #####
 
     ##### zad 4.3
-    print("\nzad 4.2")
+    print("\nzad 4.3")
     
     n = 5
     p = 0.5
     digraph = generate_random_digraph(n, p)
 
     # Perform Bellman-Ford algorithm from a given source vertex
-    source_vertex = 0
-    shortest_paths = bellman_ford(digraph, source_vertex)
-    print("\nShortest paths from vertex", source_vertex)
-    print(shortest_paths)
+    dist_matrix = np.zeros((n, n))
+    for vertex in digraph.nodes:
+        distance = np.array(list(bellman_ford(digraph, vertex).values()))
+        dist_matrix[vertex, :] = distance
+
+    print("Matrix of distances:")
+    print(dist_matrix)
 
     visualize_digraph_with_weights(digraph)
+
+    #####
+
+    ##### zad 4.4
+    print("\nzad 4.4")
+
+
 
 
 

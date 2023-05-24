@@ -1,5 +1,6 @@
 import networkx as nx
 import random
+import numpy as np
 from lab4.digraph import generate_digraph
 
 def generate_random_strong_digraph(n, p):
