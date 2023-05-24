@@ -4,6 +4,7 @@ from lab4.kosaraju import *
 from lab4.di_shape_conversion import *
 from lab4.digraph_io import *
 from lab4.bellman_ford import *
+from lab4.jhonson import johnson_algorithm
 
 def main():
     ##### zad 4.1
@@ -55,13 +56,10 @@ def main():
     digraph = generate_random_digraph(n, p)
 
     # Perform Bellman-Ford algorithm from a given source vertex
-    dist_matrix = np.zeros((n, n))
-    for vertex in digraph.nodes:
-        distance = np.array(list(bellman_ford(digraph, vertex).values()))
-        dist_matrix[vertex, :] = distance
+    shortest_distance = bellman_ford(digraph, 0)
 
-    print("Matrix of distances:")
-    print(dist_matrix)
+    print("Shortest distance from 0 vertex:")
+    print(shortest_distance)
 
     visualize_digraph_with_weights(digraph)
 
@@ -70,8 +68,10 @@ def main():
     ##### zad 4.4
     print("\nzad 4.4")
 
+    distances = johnson_algorithm(digraph)
 
-
+    print("Matrix of shortest distances:")
+    print(distances)
 
 
 if __name__ == '__main__':
