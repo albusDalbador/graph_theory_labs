@@ -12,7 +12,7 @@ def main():
 
     n = 5  # liczba wierzchołków
     p = 0.5  # prawdopodobieństwo istnienia krawędzi
-    digraph = generate_digraph(n, p)
+    digraph = generate_random_digraph(n, p)
 
     # digraph = read_digraph_from_adj_matrix()
     # digraph = read_digraph_from_adjacency_list()
@@ -53,15 +53,13 @@ def main():
     
     n = 5
     p = 0.5
-    digraph = generate_random_digraph(n, p)
+    digraph = generate_random_digraph_with_weight(n, p)
 
     # Perform Bellman-Ford algorithm from a given source vertex
     shortest_distance = bellman_ford(digraph, 0)
 
     print("Shortest distance from 0 vertex:")
     print(shortest_distance)
-
-    visualize_digraph_with_weights(digraph)
 
     #####
 
@@ -72,6 +70,8 @@ def main():
 
     print("Matrix of shortest distances:")
     print(distances)
+
+    visualize_digraph_with_weights(digraph)
 
 
 if __name__ == '__main__':

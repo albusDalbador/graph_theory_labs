@@ -2,7 +2,7 @@ import networkx as nx
 import random
 import matplotlib.pyplot as plt
 
-def generate_digraph(n, p):
+def generate_random_digraph(n, p):
     digraph = nx.DiGraph()
     digraph.add_nodes_from(range(n))
 
