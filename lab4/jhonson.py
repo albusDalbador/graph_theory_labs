@@ -34,7 +34,7 @@ def johnson_algorithm(digraph):
         extended_graph.add_edge(num_nodes, node, weight=0)
 
     # Run Bellman-Ford algorithm to get distance adjustments
-    distance_dict, _ = dijkstra(extended_graph, num_nodes)
+    distance_dict, _ = bellman_ford(extended_graph, num_nodes)
 
     # Initialize the array for shortest distances
     shortest_distances = np.zeros((num_nodes, num_nodes), dtype=float)
