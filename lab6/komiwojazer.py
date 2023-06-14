@@ -39,6 +39,7 @@ def simulated_annealing(points, initial_temperature=100, cooling_factor=0.99, nu
     current_path = generate_initial_path(num_points)
     best_path = current_path.copy()
     current_distance = calculate_path_distance(points, current_path)
+    first_path = current_distance
     best_distance = current_distance
     temperature = initial_temperature
 
@@ -56,7 +57,7 @@ def simulated_annealing(points, initial_temperature=100, cooling_factor=0.99, nu
 
         temperature *= cooling_factor
 
-    return best_path, best_distance
+    return best_path, best_distance, first_path
 
 #rysowanie punktów na wykresie
 def plot_path(points, path):
