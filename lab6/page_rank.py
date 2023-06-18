@@ -4,50 +4,58 @@ import numpy as np
 from lab4.di_shape_conversion import *
 
 def pagerank_a(graph, d=0.15, max_iter=100):
-    # Tworzenie macierzy sąsiedztwa
-    # adjacency_matrix = nx.to_numpy_array(graph)
-    adjacency_matrix = nx_digraph_object_to_adj_matrix(graph)
+    # Convert digraph to adjacency matrix
+    adjacency_matrix = nx.to_numpy_array(graph)
 
-    # Obliczanie stopni wierzchołków
+    # Calculate outdegrees of nodes
     outdegrees = np.sum(adjacency_matrix, axis=0)
 
-    # Normalizacja macierzy sąsiedztwa
-    adjacency_matrix = adjacency_matrix / outdegrees
+    # Normalize adjacency matrix and handle zero outdegrees
+    for i, outdegree in enumerate(outdegrees):
+        if outdegree > 0:
+            adjacency_matrix[:, i] /= outdegree
+        else:
+            adjacency_matrix[:, i] = 1 / len(graph)
 
-    # Liczba wierzchołków w grafie
+    # Number of nodes in the graph
     num_nodes = len(graph)
 
-    # Inicjalizacja wektora PageRank
+    # Initialize PageRank vector
     pagerank_vector = np.ones(num_nodes) / num_nodes
 
-    # Iteracyjne obliczanie PageRank
+    # Iteratively calculate PageRank
     for _ in range(max_iter):
         teleportation_vector = np.ones(num_nodes) / num_nodes
         pagerank_vector = (1 - d) * np.matmul(adjacency_matrix, pagerank_vector) + d * teleportation_vector
 
     return pagerank_vector
 
-def pagerank_b(graph, d=0.15, max_iter=100, tolerance=1e-6):
-    num_nodes = graph.number_of_nodes()
+def pagerank_b(graph, d=0.15, epsilon=1e-8, max_iter=100):
+    n = graph.number_of_nodes()
+    A = nx.to_numpy_array(graph)
+    P = np.zeros((n, n))
 
-    # Tworzenie macierzy sąsiedztwa
-    adjacency_matrix = nx.to_numpy_array(graph)
+    # Tworzenie macierzy stochastycznej P
+    for i in range(n):
+        di = np.sum(A[i])
+        for j in range(n):
+            if di > 0:
+                P[i, j] = (1 - d) * A[i, j] / di + d / n
+            else:
+                P[i, j] = 1 / n
 
-    # Obliczanie stopni wyjściowych wierzchołków
-    outdegrees = np.sum(adjacency_matrix, axis=1)
+    # Inicjalizacja wektora obsadzeń
+    p = np.ones(n) / n
 
-    # Inicjalizacja wektora obsadzeń p0
-    p = np.ones(num_nodes) / num_nodes
-
-    # Iteracyjne obliczanie PageRank
+    # Iteracyjne obliczenie wektora obsadzeń
     for _ in range(max_iter):
-        p_new = (1 - d) * np.matmul(adjacency_matrix.T / outdegrees, p) + d / num_nodes
-
-        # Sprawdzanie warunku zbieżności
-        if np.linalg.norm(p - p_new) < tolerance:
+        p_next = np.dot(p, P)
+        if np.linalg.norm(p_next - p, 1) < epsilon:
             break
+        p = p_next
 
-        p = p_new
+    # Normalizacja wektora obsadzeń
+    p /= np.sum(p)
 
     return p
 
