@@ -1,7 +1,6 @@
 import networkx as nx
 import random
 import numpy as np
-from lab4.di_shape_conversion import *
 
 def pagerank_a(graph, d=0.15, max_iter=100):
     # Convert digraph to adjacency matrix
